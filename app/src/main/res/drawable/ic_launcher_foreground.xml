@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Sonne -->
+    <path
+        android:fillColor="#F2A900"
+        android:pathData="M62,40 m-9,0 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0" />
+    <!-- Wellen -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M30,62 C36,62 36,57 42,57 C48,57 48,62 54,62 C60,62 60,57 66,57 C72,57 72,62 78,62" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M30,74 C36,74 36,69 42,69 C48,69 48,74 54,74 C60,74 60,69 66,69 C72,69 72,74 78,74" />
+</vector>

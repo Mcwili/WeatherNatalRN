@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tempo RN</string>
+    <string name="tab_home">Início</string>
+    <string name="tab_forecast">Previsão</string>
+    <string name="tab_maps">Mapas</string>
+    <string name="tab_tide">Maré</string>
+    <string name="tab_models">Modelos</string>
+    <string name="offline_notice">Sem conexão. Exibindo a última previsão disponível.</string>
+    <string name="radar_unavailable">Radar meteorológico indisponível ou com cobertura limitada para esta região.</string>
+    <string name="tide_no_official">Os horários oficiais da DHN não estão disponíveis para este período. Exibindo uma estimativa baseada em modelo.</string>
+    <string name="confidence_explainer">A confiança indica o nível de concordância entre os modelos, não uma garantia de que a previsão irá ocorrer.</string>
+    <string name="sea_safety">As condições podem mudar rapidamente. Consulte as autoridades locais e observe o mar antes de entrar na água.</string>
+</resources>

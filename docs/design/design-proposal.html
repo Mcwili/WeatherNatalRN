@@ -1,0 +1,973 @@
+<title>Tempo RN — Designvorschlag Frontend</title>
+<style>
+  /* ============ Design Tokens ============ */
+  :root {
+    color-scheme: light;
+    /* Seiten-Chrome */
+    --page: #f3f6f7;
+    --panel: #ffffff;
+    --ink: #10222a;
+    --ink-2: #4a5c64;
+    --ink-3: #7d8c92;
+    --hairline: #dde5e8;
+
+    /* Tempo RN — Material-3-Rollen (Light) */
+    --tn-primary: #006b7d;
+    --tn-on-primary: #ffffff;
+    --tn-primary-container: #b2ebf8;
+    --tn-on-primary-container: #001f26;
+    --tn-secondary: #6d5c3f;
+    --tn-secondary-container: #f6e7cb;
+    --tn-on-secondary-container: #251a04;
+    --tn-tertiary: #b3502e;
+    --tn-tertiary-container: #ffdbcf;
+    --tn-surface: #f6fafb;
+    --tn-surface-container: #eaf1f3;
+    --tn-surface-high: #ffffff;
+    --tn-on-surface: #171c1e;
+    --tn-on-surface-2: #43555c;
+    --tn-on-surface-3: #6d7f86;
+    --tn-outline: #d3dee1;
+    --tn-scrim-map: linear-gradient(160deg, #cfe7d8 0%, #e8e2c8 38%, #bcd9e6 39%, #9fcfe3 100%);
+
+    /* Confidence / Status */
+    --conf-alta: #0b8a55;
+    --conf-mod: #b57b00;
+    --conf-baixa: #cf5a33;
+    --conf-mbaixa: #c22f3d;
+    --conf-alta-bg: #dcf3e7;
+    --conf-mod-bg: #f8ecd2;
+    --conf-baixa-bg: #fbe3d8;
+    --conf-mbaixa-bg: #fadcdf;
+
+    /* Chart-Serien (validiert, light) */
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --chart-grid: #e2eaec;
+    --chart-band: rgba(0, 107, 125, 0.14);
+    --night-band: rgba(16, 34, 42, 0.07);
+
+    --shadow: 0 1px 2px rgba(16,34,42,.06), 0 8px 24px rgba(16,34,42,.07);
+    --phone-shadow: 0 2px 6px rgba(16,34,42,.10), 0 24px 48px rgba(16,34,42,.14);
+    --font: "Roboto Flex", Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0a1216;
+      --panel: #101c22;
+      --ink: #e8eef0;
+      --ink-2: #a5b6bc;
+      --ink-3: #6d7f86;
+      --hairline: #223038;
+
+      --tn-primary: #7ad0e2;
+      --tn-on-primary: #00363f;
+      --tn-primary-container: #004e5b;
+      --tn-on-primary-container: #b2ebf8;
+      --tn-secondary: #dcc296;
+      --tn-secondary-container: #53442a;
+      --tn-on-secondary-container: #f6e7cb;
+      --tn-tertiary: #ffb59a;
+      --tn-tertiary-container: #872f10;
+      --tn-surface: #0e1a20;
+      --tn-surface-container: #16242b;
+      --tn-surface-high: #1c2e36;
+      --tn-on-surface: #e2e9eb;
+      --tn-on-surface-2: #aebfc5;
+      --tn-on-surface-3: #7b8d94;
+      --tn-outline: #2a3b44;
+      --tn-scrim-map: linear-gradient(160deg, #16323a 0%, #2e3a2c 38%, #10333f 39%, #0d2c3a 100%);
+
+      --conf-alta: #4fd598; --conf-mod: #eec24f; --conf-baixa: #f0906c; --conf-mbaixa: #f07a86;
+      --conf-alta-bg: #113627; --conf-mod-bg: #3a2f10; --conf-baixa-bg: #40200f; --conf-mbaixa-bg: #401318;
+
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+      --chart-grid: #223038;
+      --chart-band: rgba(122, 208, 226, 0.16);
+      --night-band: rgba(0, 0, 0, 0.30);
+
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+      --phone-shadow: 0 2px 6px rgba(0,0,0,.4), 0 24px 48px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0a1216; --panel: #101c22; --ink: #e8eef0; --ink-2: #a5b6bc; --ink-3: #6d7f86; --hairline: #223038;
+    --tn-primary: #7ad0e2; --tn-on-primary: #00363f; --tn-primary-container: #004e5b; --tn-on-primary-container: #b2ebf8;
+    --tn-secondary: #dcc296; --tn-secondary-container: #53442a; --tn-on-secondary-container: #f6e7cb;
+    --tn-tertiary: #ffb59a; --tn-tertiary-container: #872f10;
+    --tn-surface: #0e1a20; --tn-surface-container: #16242b; --tn-surface-high: #1c2e36;
+    --tn-on-surface: #e2e9eb; --tn-on-surface-2: #aebfc5; --tn-on-surface-3: #7b8d94; --tn-outline: #2a3b44;
+    --tn-scrim-map: linear-gradient(160deg, #16323a 0%, #2e3a2c 38%, #10333f 39%, #0d2c3a 100%);
+    --conf-alta: #4fd598; --conf-mod: #eec24f; --conf-baixa: #f0906c; --conf-mbaixa: #f07a86;
+    --conf-alta-bg: #113627; --conf-mod-bg: #3a2f10; --conf-baixa-bg: #40200f; --conf-mbaixa-bg: #401318;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+    --chart-grid: #223038; --chart-band: rgba(122, 208, 226, 0.16); --night-band: rgba(0,0,0,.30);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    --phone-shadow: 0 2px 6px rgba(0,0,0,.4), 0 24px 48px rgba(0,0,0,.5);
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #f3f6f7; --panel: #ffffff; --ink: #10222a; --ink-2: #4a5c64; --ink-3: #7d8c92; --hairline: #dde5e8;
+    --tn-primary: #006b7d; --tn-on-primary: #ffffff; --tn-primary-container: #b2ebf8; --tn-on-primary-container: #001f26;
+    --tn-secondary: #6d5c3f; --tn-secondary-container: #f6e7cb; --tn-on-secondary-container: #251a04;
+    --tn-tertiary: #b3502e; --tn-tertiary-container: #ffdbcf;
+    --tn-surface: #f6fafb; --tn-surface-container: #eaf1f3; --tn-surface-high: #ffffff;
+    --tn-on-surface: #171c1e; --tn-on-surface-2: #43555c; --tn-on-surface-3: #6d7f86; --tn-outline: #d3dee1;
+    --tn-scrim-map: linear-gradient(160deg, #cfe7d8 0%, #e8e2c8 38%, #bcd9e6 39%, #9fcfe3 100%);
+    --conf-alta: #0b8a55; --conf-mod: #b57b00; --conf-baixa: #cf5a33; --conf-mbaixa: #c22f3d;
+    --conf-alta-bg: #dcf3e7; --conf-mod-bg: #f8ecd2; --conf-baixa-bg: #fbe3d8; --conf-mbaixa-bg: #fadcdf;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --chart-grid: #e2eaec; --chart-band: rgba(0,107,125,.14); --night-band: rgba(16,34,42,.07);
+    --shadow: 0 1px 2px rgba(16,34,42,.06), 0 8px 24px rgba(16,34,42,.07);
+    --phone-shadow: 0 2px 6px rgba(16,34,42,.10), 0 24px 48px rgba(16,34,42,.14);
+  }
+
+  /* ============ Seiten-Layout ============ */
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* Hero */
+  .hero { padding: 72px 0 40px; }
+  .horizon {
+    height: 6px; border-radius: 3px; margin-bottom: 40px;
+    background: linear-gradient(90deg, var(--tn-primary) 0%, var(--tn-primary) 55%, var(--tn-secondary) 55%, var(--tn-secondary) 72%, var(--tn-tertiary) 72%, var(--tn-tertiary) 100%);
+  }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600; margin: 0 0 12px;
+  }
+  h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.08; margin: 0 0 16px; font-weight: 750; letter-spacing: -.015em; text-wrap: balance; }
+  h1 .thin { font-weight: 350; color: var(--ink-2); }
+  .lede { max-width: 62ch; color: var(--ink-2); font-size: 18px; margin: 0; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 72px; }
+  h2 { font-size: 26px; margin: 0 0 6px; font-weight: 700; letter-spacing: -.01em; }
+  .sec-note { color: var(--ink-2); margin: 0 0 28px; max-width: 70ch; }
+
+  /* Prinzipien */
+  .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .principle {
+    background: var(--panel); border: 1px solid var(--hairline); border-radius: 16px;
+    padding: 20px 20px 18px; box-shadow: var(--shadow);
+  }
+  .principle h3 { margin: 0 0 8px; font-size: 16px; }
+  .principle p { margin: 0; font-size: 14px; color: var(--ink-2); }
+  .principle .tag {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--tn-primary); margin-bottom: 10px;
+  }
+
+  /* Farbsystem */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .swatch-group { background: var(--panel); border: 1px solid var(--hairline); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+  .swatch-group h3 { margin: 0 0 4px; font-size: 15px; }
+  .swatch-group .role { font-size: 13px; color: var(--ink-2); margin: 0 0 14px; }
+  .chiprow { display: flex; flex-direction: column; gap: 8px; }
+  .chip { display: flex; align-items: center; gap: 12px; }
+  .chip .dot { width: 40px; height: 28px; border-radius: 8px; border: 1px solid var(--hairline); flex: none; }
+  .chip .name { font-size: 13px; font-weight: 600; }
+  .chip .hex { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  /* Typo */
+  .typo { background: var(--panel); border: 1px solid var(--hairline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow); }
+  .typo-row { display: grid; grid-template-columns: 170px 1fr; gap: 20px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--hairline); }
+  .typo-row:last-child { border-bottom: 0; }
+  .typo-meta { font-size: 12px; color: var(--ink-3); letter-spacing: .05em; }
+  .t-display { font-size: 44px; font-weight: 320; letter-spacing: -.02em; line-height: 1.05; }
+  .t-head { font-size: 24px; font-weight: 650; }
+  .t-title { font-size: 17px; font-weight: 600; }
+  .t-body { font-size: 15px; }
+  .t-label { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+  .t-num { font-size: 40px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  /* Screens-Galerie */
+  .screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 40px 28px; align-items: start; }
+  .screen-block { display: flex; flex-direction: column; gap: 14px; }
+  .caption { font-size: 14px; color: var(--ink-2); max-width: 44ch; }
+  .caption b { color: var(--ink); }
+
+  /* ============ Phone-Mockups ============ */
+  .phone {
+    width: 330px; margin: 0 auto; background: var(--tn-surface);
+    border-radius: 30px; border: 1px solid var(--tn-outline);
+    box-shadow: var(--phone-shadow);
+    overflow: hidden; display: flex; flex-direction: column;
+    height: 700px; color: var(--tn-on-surface);
+  }
+  .statusbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px 4px; font-size: 12.5px; font-weight: 600; color: var(--tn-on-surface-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .app-scroll { flex: 1; overflow-y: auto; padding: 6px 14px 10px; scrollbar-width: none; }
+  .app-scroll::-webkit-scrollbar { display: none; }
+
+  .appbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 6px 10px; }
+  .appbar .loc { font-size: 17px; font-weight: 650; display: flex; align-items: center; gap: 6px; }
+  .appbar .upd { font-size: 11.5px; color: var(--tn-on-surface-3); }
+
+  .card {
+    background: var(--tn-surface-high); border-radius: 20px; padding: 16px;
+    border: 1px solid var(--tn-outline); margin-bottom: 12px;
+  }
+  .card.tonal { background: var(--tn-surface-container); }
+  .card h4 { margin: 0 0 2px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--tn-on-surface-3); }
+
+  .now { text-align: left; padding: 8px 6px 16px; }
+  .now .temp { font-size: 64px; font-weight: 280; line-height: 1; letter-spacing: -.02em; }
+  .now .desc { font-size: 15px; color: var(--tn-on-surface-2); margin-top: 4px; }
+  .now-row { display: flex; align-items: center; gap: 16px; }
+
+  .conf-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 650; border-radius: 999px; padding: 3px 10px;
+  }
+  .conf-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .c-alta { color: var(--conf-alta); background: var(--conf-alta-bg); }
+  .c-mod { color: var(--conf-mod); background: var(--conf-mod-bg); }
+  .c-baixa { color: var(--conf-baixa); background: var(--conf-baixa-bg); }
+  .c-mbaixa { color: var(--conf-mbaixa); background: var(--conf-mbaixa-bg); }
+
+  .rain-q { font-size: 21px; font-weight: 700; margin: 2px 0 2px; }
+  .rain-main { font-size: 15px; margin: 6px 0 2px; }
+  .rain-main b { font-size: 26px; font-weight: 700; }
+  .rain-sub { font-size: 12.5px; color: var(--tn-on-surface-2); margin-bottom: 8px; }
+
+  .tide-line { display: flex; justify-content: space-between; align-items: baseline; margin: 4px 0 2px; }
+  .tide-line .big { font-size: 19px; font-weight: 700; }
+  .tide-line .cd { font-size: 12px; color: var(--tn-on-surface-2); }
+
+  .hours { display: flex; gap: 6px; overflow-x: auto; padding: 4px 2px 6px; scrollbar-width: none; }
+  .hours::-webkit-scrollbar { display: none; }
+  .hour {
+    flex: none; width: 56px; text-align: center; padding: 10px 4px;
+    background: var(--tn-surface-high); border: 1px solid var(--tn-outline); border-radius: 14px;
+  }
+  .hour.active { background: var(--tn-primary-container); border-color: transparent; color: var(--tn-on-primary-container); }
+  .hour .h { font-size: 11px; font-weight: 600; color: var(--tn-on-surface-3); }
+  .hour.active .h { color: inherit; }
+  .hour .t { font-size: 14.5px; font-weight: 650; margin: 3px 0 1px; }
+  .hour .p { font-size: 10.5px; font-weight: 600; color: var(--tn-primary); }
+  .hour svg { width: 22px; height: 22px; margin-top: 4px; }
+
+  .day-row { display: grid; grid-template-columns: 44px 24px 1fr auto; align-items: center; gap: 10px; padding: 9px 2px; border-bottom: 1px solid var(--tn-outline); font-size: 13.5px; }
+  .day-row:last-child { border-bottom: 0; }
+  .day-row .d { font-weight: 650; }
+  .day-row .meta { color: var(--tn-on-surface-3); font-size: 11.5px; }
+  .day-row .mm { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .day-row svg { width: 22px; height: 22px; }
+
+  .bottomnav {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--tn-outline); background: var(--tn-surface-container);
+    padding: 8px 4px 12px;
+  }
+  .navitem { text-align: center; font-size: 10.5px; font-weight: 600; color: var(--tn-on-surface-3); }
+  .navitem svg { width: 22px; height: 22px; display: block; margin: 0 auto 2px; }
+  .navitem.on { color: var(--tn-primary); }
+  .navitem.on .pill { background: var(--tn-primary-container); border-radius: 999px; width: 48px; margin: 0 auto 2px; padding: 3px 0; color: var(--tn-on-primary-container); }
+  .navitem.on .pill svg { margin: 0 auto; }
+
+  .chips { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 10px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .fchip {
+    flex: none; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: 10px;
+    border: 1px solid var(--tn-outline); color: var(--tn-on-surface-2); background: var(--tn-surface-high);
+  }
+  .fchip.on { background: var(--tn-primary); border-color: var(--tn-primary); color: var(--tn-on-primary); }
+
+  .chart-card svg { width: 100%; height: auto; display: block; }
+  .axis-note { font-size: 10.5px; color: var(--tn-on-surface-3); display: flex; justify-content: space-between; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: var(--tn-on-surface-2); margin-top: 8px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  .conf-strip { display: flex; gap: 2px; margin-top: 10px; }
+  .conf-strip i { height: 8px; flex: 1; border-radius: 2px; }
+
+  /* Karte */
+  .map-area { position: relative; border-radius: 20px; overflow: hidden; height: 300px; background: var(--tn-scrim-map); border: 1px solid var(--tn-outline); margin-bottom: 12px; }
+  .map-area .blob { position: absolute; border-radius: 50%; filter: blur(10px); opacity: .75; }
+  .map-label { position: absolute; font-size: 10.5px; font-weight: 600; color: var(--tn-on-surface-2); background: color-mix(in srgb, var(--tn-surface-high) 80%, transparent); padding: 2px 7px; border-radius: 6px; }
+  .map-stamp { position: absolute; top: 10px; left: 10px; font-size: 11px; font-weight: 650; background: var(--tn-surface-high); color: var(--tn-on-surface); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--tn-outline); font-variant-numeric: tabular-nums; }
+  .map-attr { position: absolute; bottom: 6px; right: 8px; font-size: 9px; color: var(--tn-on-surface-2); background: color-mix(in srgb, var(--tn-surface-high) 75%, transparent); padding: 1px 6px; border-radius: 4px; }
+  .timeline { display: flex; align-items: center; gap: 10px; }
+  .playbtn { width: 40px; height: 40px; flex: none; border-radius: 14px; background: var(--tn-primary); color: var(--tn-on-primary); display: grid; place-items: center; }
+  .track { flex: 1; height: 4px; border-radius: 2px; background: var(--tn-outline); position: relative; }
+  .track::before { content: ""; position: absolute; inset: 0 46% 0 0; background: var(--tn-primary); border-radius: 2px; }
+  .track .knob { position: absolute; left: 54%; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: var(--tn-primary); border: 3px solid var(--tn-surface-high); box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+  .t-stamp { font-size: 11.5px; font-weight: 650; font-variant-numeric: tabular-nums; }
+
+  /* Modelos */
+  .model-row { display: grid; grid-template-columns: 52px 1fr 44px; gap: 8px; align-items: center; padding: 5px 0; font-size: 12px; }
+  .model-row .nm { font-weight: 650; }
+  .model-row .bar { height: 14px; border-radius: 4px 7px 7px 4px; min-width: 2px; }
+  .model-row .val { text-align: right; font-variant-numeric: tabular-nums; color: var(--tn-on-surface-2); }
+  .model-row.consol { border-top: 1px dashed var(--tn-outline); margin-top: 6px; padding-top: 10px; }
+  .model-row.consol .bar { background: var(--tn-primary); }
+  .model-row.consol .nm { color: var(--tn-primary); }
+  .weight-note { font-size: 10.5px; color: var(--tn-on-surface-3); margin-top: 2px; }
+
+  .offline {
+    display: flex; gap: 8px; align-items: center; font-size: 12px; font-weight: 600;
+    background: var(--tn-secondary-container); color: var(--tn-on-secondary-container);
+    border-radius: 12px; padding: 9px 12px; margin-bottom: 12px;
+  }
+
+  /* Komponenten-Sektion */
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .comp { background: var(--panel); border: 1px solid var(--hairline); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+  .comp h3 { margin: 0 0 12px; font-size: 15px; }
+  .comp .demo { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .comp p { font-size: 13px; color: var(--ink-2); margin: 12px 0 0; }
+  .scale { display: flex; gap: 3px; width: 100%; }
+  .scale i { flex: 1; height: 22px; border-radius: 5px; display: grid; place-items: center; font-size: 9.5px; font-weight: 700; color: #fff; font-style: normal; }
+
+  .next { background: var(--panel); border: 1px solid var(--hairline); border-radius: 16px; padding: 24px 28px; box-shadow: var(--shadow); }
+  .next ol { margin: 8px 0 0; padding-left: 20px; color: var(--ink-2); }
+  .next li { margin-bottom: 6px; }
+  .next b { color: var(--ink); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .phone { transition: transform .25s ease; }
+    .phone:hover { transform: translateY(-3px); }
+  }
+  @media (max-width: 720px) {
+    .typo-row { grid-template-columns: 1fr; gap: 4px; }
+    .hero { padding-top: 48px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <!-- SVG-Icon-Bibliothek -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.4" fill="#f2a900"/><g stroke="#f2a900" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.4v2.6M12 19v2.6M2.4 12h2.6M19 12h2.6M5 5l1.8 1.8M17.2 17.2 19 19M19 5l-1.8 1.8M6.8 17.2 5 19"/></g></symbol>
+      <symbol id="i-pcloud" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.6" fill="#f2a900"/><path d="M8 18.4h8.6a3.4 3.4 0 0 0 .5-6.77 5 5 0 0 0-9.6 1.02A3 3 0 0 0 8 18.4z" fill="#9fb3bc"/></symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 17.4h9.6a3.6 3.6 0 0 0 .53-7.16 5.3 5.3 0 0 0-10.18 1.08A3.2 3.2 0 0 0 7 17.4z" fill="#9fb3bc"/></symbol>
+      <symbol id="i-rain" viewBox="0 0 24 24"><path d="M7 14.4h9.6a3.6 3.6 0 0 0 .53-7.16A5.3 5.3 0 0 0 6.95 8.32 3.2 3.2 0 0 0 7 14.4z" fill="#9fb3bc"/><g stroke="#2a78d6" stroke-width="1.8" stroke-linecap="round"><path d="M9 17l-1 3M13 17l-1 3M17 17l-1 3"/></g></symbol>
+      <symbol id="i-storm" viewBox="0 0 24 24"><path d="M7 13.4h9.6a3.6 3.6 0 0 0 .53-7.16A5.3 5.3 0 0 0 6.95 7.32 3.2 3.2 0 0 0 7 13.4z" fill="#7d919b"/><path d="M12.6 14.5 10 18.6h2.2L11 22l4-5h-2.4l1.6-2.5z" fill="#f2a900"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M4.5 11.5 12 5l7.5 6.5V19a1 1 0 0 1-1 1H14v-5h-4v5H5.5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></symbol>
+      <symbol id="i-fx" viewBox="0 0 24 24"><path d="M4 17.5 9 11l3.6 3.5L20 6.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 6.5H20V11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-mapa" viewBox="0 0 24 24"><path d="M9 4 4 6v14l5-2 6 2 5-2V4l-5 2-6-2zM9 4v14M15 6v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+      <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2 1 3 1.4M3 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2 1 3 1.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 4 8 4.5-8 4.5-8-4.5zM5.5 13 12 16.6l6.5-3.6M5.5 16.5 12 20l6.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 6.5v11l9-5.5z" fill="currentColor"/></symbol>
+      <symbol id="i-off" viewBox="0 0 24 24"><path d="M12 19.6h.01M8.6 16.2a5.2 5.2 0 0 1 6.8 0M5.6 13a9.5 9.5 0 0 1 7.9-2.5M18.4 13a9.4 9.4 0 0 0-1.9-1.4M3 5.5 21 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="horizon" role="presentation"></div>
+    <p class="eyebrow">Designvorschlag · Frontend · v1</p>
+    <h1>Tempo RN <span class="thin">— previsão com confiança</span></h1>
+    <p class="lede">
+      Eine Wetter- und Gezeiten-App für die Küste von Rio Grande do Norte. Das Design beantwortet
+      die Kernfragen — <strong>Vai chover? Como está a maré?</strong> — in Sekunden, macht
+      <strong>Unsicherheit sichtbar statt sie zu verstecken</strong> und bleibt dabei unter tropischer
+      Sonne lesbar. Material 3, Jetpack Compose, vollständig in brasilianischem Portugiesisch.
+    </p>
+  </header>
+
+  <!-- ============ PRINZIPIEN ============ -->
+  <section>
+    <h2>Designprinzipien</h2>
+    <p class="sec-note">Vier Leitplanken, an denen jede Screen-Entscheidung gemessen wird.</p>
+    <div class="principles">
+      <div class="principle"><span class="tag">01 · Resposta</span><h3>Antwort vor Daten</h3><p>Die App zeigt zuerst die Antwort („62% de chance de chuva"), dann die Evidenz. Zahlenfriedhöfe gibt es nicht — jede Zahl hat eine Frage, die sie beantwortet.</p></div>
+      <div class="principle"><span class="tag">02 · Confiança</span><h3>Unsicherheit ist Inhalt</h3><p>Confidence-Chips, Prognosebandbreiten und Modell-Divergenz sind eigene UI-Elemente mit fester Farbsemantik — keine Fußnoten.</p></div>
+      <div class="principle"><span class="tag">03 · Sol</span><h3>Sonnenlesbar</h3><p>Hohe Kontraste, große fette Kernwerte, ruhige Flächen. Der helle Modus ist für den Strand bei 11 Uhr optimiert, der dunkle für den Abend auf der Varanda.</p></div>
+      <div class="principle"><span class="tag">04 · Maré</span><h3>Maritim, nicht kitschig</h3><p>Die Identität kommt aus einer Horizontlinie: Ozean-Petrol, Dünen-Sand, Poente-Koralle. Keine Foto-Hintergründe, keine Gradient-Deko — Farbe trägt Bedeutung.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ FARBSYSTEM ============ -->
+  <section>
+    <h2>Farbsystem</h2>
+    <p class="sec-note">
+      Material-3-Rollen, aus drei Küstenfarben abgeleitet: <b>Oceano</b> (Primär), <b>Duna</b> (Sekundär),
+      <b>Poente</b> (Tertiär, sparsam für Sonne/UV). Confidence hat eine eigene, feste Semantik-Skala,
+      die nie für anderes verwendet wird. Die Chart-Serienfarben für den Modellvergleich sind auf
+      Farbfehlsichtigkeit validiert (CVD ΔE ≥ 8 benachbart, beide Themes). Diese Seite folgt deinem
+      System-Theme — über den Artefakt-Umschalter siehst du beide Modi.
+    </p>
+    <div class="swatches">
+      <div class="swatch-group">
+        <h3>Oceano — Primär</h3>
+        <p class="role">Marke, aktive Navigation, Kernaktionen, Regen- und Gezeitenkurven</p>
+        <div class="chiprow">
+          <div class="chip"><span class="dot" style="background:#006b7d"></span><span class="name">primary · light</span><span class="hex">#006B7D</span></div>
+          <div class="chip"><span class="dot" style="background:#7ad0e2"></span><span class="name">primary · dark</span><span class="hex">#7AD0E2</span></div>
+          <div class="chip"><span class="dot" style="background:#b2ebf8"></span><span class="name">container · light</span><span class="hex">#B2EBF8</span></div>
+          <div class="chip"><span class="dot" style="background:#004e5b"></span><span class="name">container · dark</span><span class="hex">#004E5B</span></div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <h3>Duna &amp; Poente</h3>
+        <p class="role">Duna: Offline-/Hinweisflächen. Poente: Sonnenmarker, UV-Akzente — nie großflächig.</p>
+        <div class="chiprow">
+          <div class="chip"><span class="dot" style="background:#6d5c3f"></span><span class="name">Duna · light</span><span class="hex">#6D5C3F</span></div>
+          <div class="chip"><span class="dot" style="background:#f6e7cb"></span><span class="name">Duna container</span><span class="hex">#F6E7CB</span></div>
+          <div class="chip"><span class="dot" style="background:#b3502e"></span><span class="name">Poente · light</span><span class="hex">#B3502E</span></div>
+          <div class="chip"><span class="dot" style="background:#ffb59a"></span><span class="name">Poente · dark</span><span class="hex">#FFB59A</span></div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <h3>Confiança — Semantik</h3>
+        <p class="role">Fest reserviert für Vertrauenswert &amp; Datenqualität. Immer mit Text-Label, nie Farbe allein.</p>
+        <div class="chiprow">
+          <div class="chip"><span class="dot" style="background:var(--conf-alta)"></span><span class="name">Confiança alta</span><span class="hex">80–100</span></div>
+          <div class="chip"><span class="dot" style="background:var(--conf-mod)"></span><span class="name">Confiança moderada</span><span class="hex">60–79</span></div>
+          <div class="chip"><span class="dot" style="background:var(--conf-baixa)"></span><span class="name">Confiança baixa</span><span class="hex">40–59</span></div>
+          <div class="chip"><span class="dot" style="background:var(--conf-mbaixa)"></span><span class="name">Muito baixa</span><span class="hex">0–39</span></div>
+        </div>
+      </div>
+      <div class="swatch-group">
+        <h3>Chart-Serien — Modelle</h3>
+        <p class="role">Feste Zuordnung Modell → Farbe, nie rotierend. Validiert auf beiden Oberflächen; Balken sind immer direkt beschriftet.</p>
+        <div class="chiprow">
+          <div class="chip"><span class="dot" style="background:var(--s1)"></span><span class="name">ECMWF IFS</span><span class="hex">Slot 1</span></div>
+          <div class="chip"><span class="dot" style="background:var(--s2)"></span><span class="name">ECMWF AIFS</span><span class="hex">Slot 2</span></div>
+          <div class="chip"><span class="dot" style="background:var(--s3)"></span><span class="name">ICON Global</span><span class="hex">Slot 3</span></div>
+          <div class="chip"><span class="dot" style="background:var(--s4)"></span><span class="name">NOAA GFS</span><span class="hex">Slot 4</span></div>
+          <div class="chip"><span class="dot" style="background:var(--s5)"></span><span class="name">GEM Global</span><span class="hex">Slot 5</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TYPOGRAFIE ============ -->
+  <section>
+    <h2>Typografie</h2>
+    <p class="sec-note">
+      Im Produkt: <b>Roboto Flex</b> (variable) über die Material-3-Type-Scale — eine Schriftfamilie,
+      Charakter kommt aus Gewichts- und Größenspreizung. Große Wetterwerte laufen extraleicht (Weight ≈ 280),
+      damit „27°" Ruhe ausstrahlt; Labels laufen kompakt und versal. Tabellen und Zeitachsen bekommen
+      Tabellenziffern.
+    </p>
+    <div class="typo">
+      <div class="typo-row"><span class="typo-meta">Display · 64/280<br>Aktuelle Temperatur</span><span class="t-display">27°</span></div>
+      <div class="typo-row"><span class="typo-meta">Headline · 24/650<br>Screen-Titel</span><span class="t-head">Maré em Pirangi</span></div>
+      <div class="typo-row"><span class="typo-meta">Title · 17/600<br>Kartentitel</span><span class="t-title">Vai chover?</span></div>
+      <div class="typo-row"><span class="typo-meta">Body · 15/400<br>Fließtext, Erklärungen</span><span class="t-body">A confiança indica o nível de concordância entre os modelos, não uma garantia de que a previsão irá ocorrer.</span></div>
+      <div class="typo-row"><span class="typo-meta">Label · 12/600 · Versal<br>Sektionen, Chips</span><span class="t-label">Próxima maré baixa</span></div>
+      <div class="typo-row"><span class="typo-meta">Numeric · tabular<br>Uhrzeiten, Höhen, mm</span><span class="t-num">15:48 · 0,5 m</span></div>
+    </div>
+  </section>
+
+  <!-- ============ SCREENS ============ -->
+  <section>
+    <h2>Die fünf Screens</h2>
+    <p class="sec-note">
+      Voll ausgearbeitete Mockups mit realistischen Daten für Pirangi do Norte (Juli, America/Fortaleza).
+      Alle sichtbaren Texte in brasilianischem Portugiesisch. Die Mockups folgen dem Seiten-Theme —
+      Umschalter oben rechts zeigt Hell und Dunkel.
+    </p>
+
+    <div class="screens">
+
+      <!-- ===== 1 · INÍCIO ===== -->
+      <div class="screen-block">
+        <div class="phone">
+          <div class="statusbar"><span>14:12</span><span>▲ ▂▄▆ 78%</span></div>
+          <div class="app-scroll">
+            <div class="appbar">
+              <span class="loc">Pirangi do Norte <span style="font-size:11px;color:var(--tn-on-surface-3)">▾</span></span>
+              <span class="upd">Atualizado às 14:05</span>
+            </div>
+            <div class="now">
+              <div class="now-row">
+                <span class="temp">27°</span>
+                <svg width="52" height="52"><use href="#i-pcloud"/></svg>
+              </div>
+              <div class="desc">Parcialmente nublado · Sensação de 30°</div>
+            </div>
+
+            <div class="card tonal">
+              <h4>Vai chover?</h4>
+              <div class="rain-main"><b>62%</b> de chance nas próximas 3 horas</div>
+              <div class="rain-sub">Possível início entre 15h e 16h · até 1,2 mm</div>
+              <span class="conf-chip c-mod">Confiança moderada</span>
+              <svg id="spark-rain" viewBox="0 0 290 44" style="width:100%;margin-top:10px"></svg>
+              <div class="axis-note"><span>14h</span><span>17h</span><span>20h</span><span>23h</span><span>2h</span></div>
+            </div>
+
+            <div class="card">
+              <h4>Maré · Porto de Natal</h4>
+              <div class="tide-line">
+                <span class="big">Descendo ↓</span>
+                <span class="cd">Faltam 1h 36min</span>
+              </div>
+              <div class="rain-sub">Próxima maré baixa às <b>15:48</b> · altura prevista 0,5 m</div>
+              <svg id="spark-tide" viewBox="0 0 290 56" style="width:100%;margin-top:6px"></svg>
+              <div class="axis-note"><span>10h</span><span>14h</span><span>18h</span><span>22h</span></div>
+            </div>
+
+            <div class="hours">
+              <div class="hour active"><div class="h">Agora</div><svg><use href="#i-pcloud"/></svg><div class="t">27°</div><div class="p">20%</div></div>
+              <div class="hour"><div class="h">15h</div><svg><use href="#i-cloud"/></svg><div class="t">27°</div><div class="p">45%</div></div>
+              <div class="hour"><div class="h">16h</div><svg><use href="#i-rain"/></svg><div class="t">26°</div><div class="p">62%</div></div>
+              <div class="hour"><div class="h">17h</div><svg><use href="#i-rain"/></svg><div class="t">26°</div><div class="p">55%</div></div>
+              <div class="hour"><div class="h">18h</div><svg><use href="#i-cloud"/></svg><div class="t">25°</div><div class="p">30%</div></div>
+              <div class="hour"><div class="h">19h</div><svg><use href="#i-pcloud"/></svg><div class="t">25°</div><div class="p">20%</div></div>
+            </div>
+
+            <div class="card">
+              <h4>Próximos dias</h4>
+              <div class="day-row"><span class="d">sex</span><svg><use href="#i-rain"/></svg><span class="meta">40% · 2,4 mm · UV 9 · ondas 1,6 m</span><span class="mm">24° / 28°</span></div>
+              <div class="day-row"><span class="d">sáb</span><svg><use href="#i-pcloud"/></svg><span class="meta">15% · UV 10 · ondas 1,8 m</span><span class="mm">24° / 29°</span></div>
+              <div class="day-row"><span class="d">dom</span><svg><use href="#i-sun"/></svg><span class="meta">5% · UV 11 · ondas 1,4 m</span><span class="mm">23° / 29°</span></div>
+              <div class="day-row"><span class="d">seg</span><svg><use href="#i-rain"/></svg><span class="meta">55% · 4,1 mm · UV 8 · ondas 2,0 m</span><span class="mm">24° / 27°</span></div>
+            </div>
+          </div>
+          <div class="bottomnav">
+            <div class="navitem on"><div class="pill"><svg><use href="#i-home"/></svg></div>Início</div>
+            <div class="navitem"><svg><use href="#i-fx"/></svg>Previsão</div>
+            <div class="navitem"><svg><use href="#i-mapa"/></svg>Mapas</div>
+            <div class="navitem"><svg><use href="#i-wave"/></svg>Maré</div>
+            <div class="navitem"><svg><use href="#i-layers"/></svg>Modelos</div>
+          </div>
+        </div>
+        <p class="caption"><b>Início.</b> Die Antwort-Hierarchie: Jetzt-Zustand → „Vai chover?" mit Wahrscheinlichkeit, Zeitfenster, Menge und Confidence-Chip → Gezeitenkarte mit Countdown → Stundenleiste → 4 Tage. Alles Wichtige ohne Scrollen erfassbar.</p>
+      </div>
+
+      <!-- ===== 2 · PREVISÃO ===== -->
+      <div class="screen-block">
+        <div class="phone">
+          <div class="statusbar"><span>14:12</span><span>▲ ▂▄▆ 78%</span></div>
+          <div class="app-scroll">
+            <div class="appbar"><span class="loc">Previsão · 96 horas</span><span class="upd">Atualizado às 14:05</span></div>
+            <div class="chips">
+              <span class="fchip on">Chuva</span><span class="fchip">Temperatura</span><span class="fchip">Vento</span><span class="fchip">Nuvens</span><span class="fchip">UV</span>
+            </div>
+
+            <div class="card chart-card">
+              <h4>Probabilidade de chuva</h4>
+              <svg id="chart-prob" viewBox="0 0 290 110"></svg>
+              <div class="axis-note"><span>sex 14h</span><span>sáb</span><span>dom</span><span>seg</span></div>
+              <div class="conf-strip" id="conf-strip" aria-label="Confiança por período"></div>
+              <div class="legend">
+                <span><i style="background:var(--conf-alta)"></i>alta</span>
+                <span><i style="background:var(--conf-mod)"></i>moderada</span>
+                <span><i style="background:var(--conf-baixa)"></i>baixa</span>
+              </div>
+            </div>
+
+            <div class="card chart-card">
+              <h4>Quantidade de chuva</h4>
+              <svg id="chart-mm" viewBox="0 0 290 96"></svg>
+              <div class="axis-note"><span>sex 14h</span><span>sáb</span><span>dom</span><span>seg</span></div>
+              <div class="legend">
+                <span><i style="background:var(--tn-primary)"></i>mediana</span>
+                <span><i style="background:var(--chart-band);outline:1px solid var(--tn-outline)"></i>faixa provável (p25–p75)</span>
+              </div>
+            </div>
+
+            <div class="card tonal">
+              <h4>Sexta · 16h</h4>
+              <div class="rain-sub" style="font-size:13.5px">
+                Chance de chuva: <b>70%</b><br>
+                Quantidade prevista: <b>1,2 mm</b> · Faixa provável: 0,4 a 2,8 mm<br>
+                Vento 18 km/h E · rajadas 29 km/h · UV 2
+              </div>
+              <span class="conf-chip c-mod">Confiança moderada</span>
+            </div>
+          </div>
+          <div class="bottomnav">
+            <div class="navitem"><svg><use href="#i-home"/></svg>Início</div>
+            <div class="navitem on"><div class="pill"><svg><use href="#i-fx"/></svg></div>Previsão</div>
+            <div class="navitem"><svg><use href="#i-mapa"/></svg>Mapas</div>
+            <div class="navitem"><svg><use href="#i-wave"/></svg>Maré</div>
+            <div class="navitem"><svg><use href="#i-layers"/></svg>Modelos</div>
+          </div>
+        </div>
+        <p class="caption"><b>Previsão.</b> 96 Stunden mit Filter-Chips. Die Bandbreite (p25–p75) ist als Fläche hinter dem Median sichtbar; der Confidence-Streifen unter der Kurve zeigt auf einen Blick, wo die Prognose belastbar ist. Tippen auf eine Stunde öffnet die Detailkarte.</p>
+      </div>
+
+      <!-- ===== 3 · MAPAS ===== -->
+      <div class="screen-block">
+        <div class="phone">
+          <div class="statusbar"><span>14:12</span><span>▲ ▂▄▆ 78%</span></div>
+          <div class="app-scroll">
+            <div class="appbar"><span class="loc">Mapas</span><span class="upd">Radar · RainViewer</span></div>
+            <div class="chips">
+              <span class="fchip on">Radar</span><span class="fchip">Chuva prevista</span><span class="fchip">Vento</span><span class="fchip">Nuvens</span>
+            </div>
+            <div class="map-area">
+              <span class="map-stamp">13:50 · há 22 min</span>
+              <span class="blob" style="width:90px;height:70px;left:36%;top:18%;background:var(--s1);opacity:.5"></span>
+              <span class="blob" style="width:56px;height:48px;left:52%;top:30%;background:var(--s1);opacity:.7"></span>
+              <span class="blob" style="width:30px;height:26px;left:58%;top:36%;background:var(--s4)"></span>
+              <span class="map-label" style="left:44%;top:56%">Natal</span>
+              <span class="map-label" style="left:38%;top:78%">Pirangi</span>
+              <span class="map-label" style="left:70%;top:64%;opacity:.7">Oceano Atlântico</span>
+              <span class="map-attr">© OpenStreetMap contributors</span>
+            </div>
+            <div class="card">
+              <div class="timeline">
+                <span class="playbtn"><svg width="22" height="22"><use href="#i-play"/></svg></span>
+                <div class="track"><span class="knob"></span></div>
+                <span class="t-stamp">13:50</span>
+              </div>
+              <div class="axis-note" style="margin-top:8px"><span>−2h</span><span>−1h</span><span>agora</span><span>+30min</span></div>
+            </div>
+            <div class="card tonal">
+              <h4>Cobertura</h4>
+              <div class="rain-sub" style="margin:0">Radar meteorológico indisponível ou com cobertura limitada para esta região. Exibindo a última imagem disponível.</div>
+            </div>
+            <div class="legend" style="padding:0 4px">
+              <span><i style="background:var(--s1)"></i>chuva fraca</span>
+              <span><i style="background:var(--s4)"></i>moderada</span>
+              <span><i style="background:var(--s2)"></i>forte</span>
+            </div>
+          </div>
+          <div class="bottomnav">
+            <div class="navitem"><svg><use href="#i-home"/></svg>Início</div>
+            <div class="navitem"><svg><use href="#i-fx"/></svg>Previsão</div>
+            <div class="navitem on"><div class="pill"><svg><use href="#i-mapa"/></svg></div>Mapas</div>
+            <div class="navitem"><svg><use href="#i-wave"/></svg>Maré</div>
+            <div class="navitem"><svg><use href="#i-layers"/></svg>Modelos</div>
+          </div>
+        </div>
+        <p class="caption"><b>Mapas.</b> MapLibre mit Layer-Chips, Radar-Zeitleiste mit Play/Scrub und sichtbarem Frame-Zeitstempel samt Datenalter. Die eingeschränkte Radarabdeckung der Region wird ehrlich als eigene Karte kommuniziert — nie stillschweigend leer.</p>
+      </div>
+
+      <!-- ===== 4 · MARÉ ===== -->
+      <div class="screen-block">
+        <div class="phone">
+          <div class="statusbar"><span>14:12</span><span>▲ ▂▄▆ 78%</span></div>
+          <div class="app-scroll">
+            <div class="appbar"><span class="loc">Maré em Pirangi</span><span class="upd">Ref.: Porto de Natal</span></div>
+
+            <div class="card tonal">
+              <div class="tide-line" style="margin-top:0">
+                <span class="big" style="font-size:22px">Maré descendo ↓</span>
+                <span class="conf-chip c-alta">Confiança alta</span>
+              </div>
+              <div class="rain-sub" style="margin-bottom:0">Horários oficiais DHN · boa concordância com o modelo</div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+              <div class="card" style="margin:0">
+                <h4>Próxima baixa</h4>
+                <div style="font-size:21px;font-weight:700;font-variant-numeric:tabular-nums">15:48</div>
+                <div class="rain-sub" style="margin:0">0,5 m · faltam 1h 36min</div>
+              </div>
+              <div class="card" style="margin:0">
+                <h4>Próxima alta</h4>
+                <div style="font-size:21px;font-weight:700;font-variant-numeric:tabular-nums">22:05</div>
+                <div class="rain-sub" style="margin:0">2,0 m · faltam 7h 53min</div>
+              </div>
+            </div>
+
+            <div class="card chart-card">
+              <h4>Curva da maré · 24h</h4>
+              <svg id="chart-tide" viewBox="0 0 290 130"></svg>
+              <div class="axis-note"><span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>24h</span></div>
+              <div class="legend">
+                <span><i style="background:var(--tn-primary)"></i>altura prevista</span>
+                <span><i style="background:var(--night-band);outline:1px solid var(--tn-outline)"></i>noite</span>
+                <span style="color:var(--tn-tertiary)">☀ 05:21 / 17:14</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h4>Mar e vento agora</h4>
+              <div class="day-row" style="grid-template-columns:1fr auto"><span class="meta">Ondas 1,6 m · período 9 s · E</span><span class="mm">Swell 1,2 m</span></div>
+              <div class="day-row" style="grid-template-columns:1fr auto"><span class="meta">Vento costeiro 18 km/h · rajadas 29</span><span class="mm">Água 27°</span></div>
+              <div class="rain-sub" style="margin-top:8px">As condições podem mudar rapidamente. Consulte as autoridades locais e observe o mar antes de entrar na água.</div>
+            </div>
+          </div>
+          <div class="bottomnav">
+            <div class="navitem"><svg><use href="#i-home"/></svg>Início</div>
+            <div class="navitem"><svg><use href="#i-fx"/></svg>Previsão</div>
+            <div class="navitem"><svg><use href="#i-mapa"/></svg>Mapas</div>
+            <div class="navitem on"><div class="pill"><svg><use href="#i-wave"/></svg></div>Maré</div>
+            <div class="navitem"><svg><use href="#i-layers"/></svg>Modelos</div>
+          </div>
+        </div>
+        <p class="caption"><b>Maré.</b> Das Herzstück: Gezeitenphase mit Datenqualität, zwei Countdown-Karten, 24h-Kurve mit Nachtband, Sonnenzeiten, markierten Hoch-/Niedrigwasserpunkten und „Agora"-Marker. Referenzstation und Quelle sind immer sichtbar.</p>
+      </div>
+
+      <!-- ===== 5 · MODELOS ===== -->
+      <div class="screen-block">
+        <div class="phone">
+          <div class="statusbar"><span>14:12</span><span>▲ ▂▄▆ 78%</span></div>
+          <div class="app-scroll">
+            <div class="appbar"><span class="loc">Modelos</span><span class="upd">sex · 16h ▾</span></div>
+
+            <div class="card tonal">
+              <h4>Concordância</h4>
+              <div class="rain-main" style="margin-top:4px"><b style="font-size:22px">5 de 7</b> modelos indicam chuva às 16h</div>
+              <span class="conf-chip c-mod">Os modelos divergem sobre a quantidade</span>
+            </div>
+
+            <div class="card">
+              <h4>Chuva prevista às 16h · mm</h4>
+              <div class="model-row"><span class="nm" style="color:var(--s1)">ECMWF</span><span class="bar" style="background:var(--s1);width:90%"></span><span class="val">1,8</span></div>
+              <div class="model-row"><span class="nm" style="color:var(--s2)">AIFS</span><span class="bar" style="background:var(--s2);width:60%"></span><span class="val">1,2</span></div>
+              <div class="model-row"><span class="nm" style="color:var(--s3)">ICON</span><span class="bar" style="background:var(--s3);width:40%"></span><span class="val">0,8</span></div>
+              <div class="model-row"><span class="nm" style="color:var(--s4)">GFS</span><span class="bar" style="background:var(--s4);width:2%"></span><span class="val">0,0</span></div>
+              <div class="model-row"><span class="nm" style="color:var(--s5)">GEM</span><span class="bar" style="background:var(--s5);width:15%"></span><span class="val">0,3</span></div>
+              <div class="model-row consol"><span class="nm">Consolid.</span><span class="bar" style="width:60%"></span><span class="val"><b>1,2</b></span></div>
+              <div class="weight-note">Mediana ponderada · faixa 0,4–2,8 mm · +2 modelos no detalhe</div>
+            </div>
+
+            <div class="card">
+              <h4>Desempenho local · 30 dias</h4>
+              <div class="model-row"><span class="nm" style="color:var(--s1)">ECMWF</span><span class="meta" style="font-size:11.5px;color:var(--tn-on-surface-2)">peso 1,00 · acerto chuva 78% · 41 aval.</span><span class="val">★</span></div>
+              <div class="model-row"><span class="nm" style="color:var(--s3)">ICON</span><span class="meta" style="font-size:11.5px;color:var(--tn-on-surface-2)">peso 0,92 · acerto chuva 74% · 41 aval.</span><span class="val"></span></div>
+              <div class="model-row"><span class="nm" style="color:var(--s4)">GFS</span><span class="meta" style="font-size:11.5px;color:var(--tn-on-surface-2)">peso 0,81 · acerto chuva 66% · 39 aval.</span><span class="val"></span></div>
+              <div class="weight-note" style="margin-top:8px">O aplicativo combina diferentes modelos meteorológicos. Modelos com melhor desempenho recente na região recebem um peso um pouco maior.</div>
+            </div>
+          </div>
+          <div class="bottomnav">
+            <div class="navitem"><svg><use href="#i-home"/></svg>Início</div>
+            <div class="navitem"><svg><use href="#i-fx"/></svg>Previsão</div>
+            <div class="navitem"><svg><use href="#i-mapa"/></svg>Mapas</div>
+            <div class="navitem"><svg><use href="#i-wave"/></svg>Maré</div>
+            <div class="navitem on"><div class="pill"><svg><use href="#i-layers"/></svg></div>Modelos</div>
+          </div>
+        </div>
+        <p class="caption"><b>Modelos.</b> Transparenz als Feature: pro Stunde die Regenmenge jedes Modells (feste Modellfarben, direkt beschriftet), die konsolidierte Prognose in Oceano abgesetzt, darunter Gewichte und lokale Trefferquote — die Erklärung, warum die App sagt, was sie sagt.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ KOMPONENTEN ============ -->
+  <section>
+    <h2>Wiederkehrende Komponenten</h2>
+    <p class="sec-note">Bausteine mit fester Semantik, die auf allen Screens identisch funktionieren.</p>
+    <div class="comp-grid">
+      <div class="comp">
+        <h3>Confidence-Chip</h3>
+        <div class="demo">
+          <span class="conf-chip c-alta">Confiança alta</span>
+          <span class="conf-chip c-mod">Confiança moderada</span>
+          <span class="conf-chip c-baixa">Confiança baixa</span>
+          <span class="conf-chip c-mbaixa">Muito baixa</span>
+        </div>
+        <p>Begleitet jede Prognoseaussage. Punkt + Text, nie Farbe allein. Tippen öffnet die Erklärung („A confiança indica o nível de concordância…").</p>
+      </div>
+      <div class="comp">
+        <h3>Regenklassen</h3>
+        <div class="scale">
+          <i style="background:#8fb8c9">fraca</i>
+          <i style="background:#4a90b8">moder.</i>
+          <i style="background:#2a63a8">forte</i>
+          <i style="background:#1c3f7a">muito f.</i>
+        </div>
+        <p>Einheitliche Blau-Sequenz (hell → dunkel = wenig → viel) für Radar-Legende, Regenkarte und mm-Balken. Grenzwerte zentral konfiguriert: 0,1 / 1 / 5 / 15 mm/h.</p>
+      </div>
+      <div class="comp">
+        <h3>UV-Skala</h3>
+        <div class="scale">
+          <i style="background:#0b8a55">0–2</i>
+          <i style="background:#b57b00">3–5</i>
+          <i style="background:#cf5a33">6–7</i>
+          <i style="background:#c22f3d">8–10</i>
+          <i style="background:#7b3f9e">11+</i>
+        </div>
+        <p>International übliche UV-Farbcodierung (Baixo → Extremo) mit Handlungshinweis („Use protetor solar."). Erscheint auf Início, Previsão und Tageskarten.</p>
+      </div>
+      <div class="comp">
+        <h3>Datenalter &amp; Offline</h3>
+        <div class="demo" style="flex-direction:column;align-items:stretch">
+          <div class="offline" style="margin:0"><svg width="18" height="18"><use href="#i-off"/></svg>Sem conexão. Exibindo a última previsão disponível.</div>
+          <span style="font-size:12px;color:var(--ink-3)">Atualizado às 13:42 · Dados de 2 horas atrás</span>
+        </div>
+        <p>Duna-Fläche für Offline/Hinweise — bewusst warm statt alarmrot, denn veraltete Daten sind ein Zustand, kein Fehler. Jede Karte trägt ihr Datenalter.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MOTION & A11Y ============ -->
+  <section>
+    <h2>Motion &amp; Zugänglichkeit</h2>
+    <div class="comp-grid">
+      <div class="comp">
+        <h3>Bewegung, sparsam</h3>
+        <p style="margin-top:0">Drei Orte, an denen Animation Bedeutung trägt — sonst keine: <b>Radar-Playback</b> (Zeit), die <b>Gezeitenkurve</b> beim Tageswechsel (sanftes Durchscrollen), und <b>Zahlwechsel</b> bei Aktualisierung (Fade, 200 ms). Alles respektiert die Systemeinstellung für reduzierte Bewegung.</p>
+      </div>
+      <div class="comp">
+        <h3>Barrierearm</h3>
+        <p style="margin-top:0">Touchziele ≥ 48 dp, Kernwerte ≥ 4,5:1 Kontrast, Semantikfarben immer mit Text/Icon gedoppelt, Chart-Serien CVD-validiert und direkt beschriftet, TalkBack-Beschreibungen pro Karte („62 por cento de chance de chuva, confiança moderada").</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NÄCHSTE SCHRITTE ============ -->
+  <section>
+    <h2>Nächste Schritte</h2>
+    <div class="next">
+      <ol>
+        <li><b>Feedback zu diesem Vorschlag</b> — insbesondere: Farbwelt Oceano/Duna/Poente, Aufbau der Startseite, Umfang des Modelos-Screens.</li>
+        <li><b>Übersetzung in Compose-Tokens</b> — das Farbsystem wird 1:1 als Material-3 <code>ColorScheme</code> (light/dark) in <code>core-ui</code> angelegt, die Typo-Scale als <code>Typography</code>.</li>
+        <li><b>Etappe 1 der Umsetzung</b> — Projektstruktur, Navigation und die Startseite gegen echte Open-Meteo-Daten.</li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  function smoothPath(pts) {
+    if (pts.length < 2) return "";
+    let d = `M ${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+      const c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += ` C ${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+    }
+    return d;
+  }
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+
+  function draw() {
+    const primary = css("--tn-primary"), band = css("--chart-band"), grid = css("--chart-grid"),
+          night = css("--night-band"), tertiary = css("--tn-tertiary"),
+          ink2 = css("--tn-on-surface-2"), ink3 = css("--tn-on-surface-3");
+    const cAlta = css("--conf-alta"), cMod = css("--conf-mod"), cBaixa = css("--conf-baixa");
+
+    /* --- Início: Regen-Sparkline (12h Wahrscheinlichkeit als Mini-Balken) --- */
+    const sr = document.getElementById("spark-rain");
+    if (sr) {
+      sr.innerHTML = "";
+      const probs = [20, 45, 62, 55, 30, 20, 15, 10, 8, 5, 5, 4];
+      const w = 290 / probs.length;
+      probs.forEach((p, i) => {
+        const h = Math.max(3, p / 100 * 40);
+        sr.appendChild(el("rect", { x: (i * w + 2).toFixed(1), y: (44 - h).toFixed(1), width: (w - 4).toFixed(1), height: h.toFixed(1), rx: 3, fill: i === 2 ? primary : band, stroke: "none" }));
+      });
+      const t = el("text", { x: 290 / probs.length * 2.5, y: 10, "font-size": 9, "font-weight": 700, fill: primary, "text-anchor": "middle" });
+      t.textContent = "62%"; sr.appendChild(t);
+    }
+
+    /* --- Início: Mini-Gezeitenkurve 10h–24h, Jetzt = 14:12 --- */
+    const st = document.getElementById("spark-tide");
+    if (st) {
+      st.innerHTML = "";
+      // Höhe(t): high 09:50 (2.1), low 15:48 (0.5), high 22:05 (2.0); Fenster 10..24h auf x 0..290
+      const pts = [];
+      for (let h = 10; h <= 24; h += 0.5) {
+        const ph = (h - 9.83) / (15.8 - 9.83) * Math.PI; // 09:50 → 15:48 = halbe Periode
+        const hh = h < 15.8 ? 1.3 + 0.8 * Math.cos(ph) : 1.25 + 0.75 * Math.cos(Math.PI + (h - 15.8) / (22.08 - 15.8) * Math.PI);
+        const x = (h - 10) / 14 * 290, y = 50 - (hh - 0.3) / 2.0 * 42;
+        pts.push([x, y]);
+      }
+      const dLine = smoothPath(pts);
+      st.appendChild(el("path", { d: dLine + ` L 290,56 L 0,56 Z`, fill: band, stroke: "none" }));
+      st.appendChild(el("path", { d: dLine, fill: "none", stroke: primary, "stroke-width": 2, "stroke-linecap": "round" }));
+      const nowX = (14.2 - 10) / 14 * 290, nowY = pts[Math.round((14.2 - 10) * 2)][1];
+      st.appendChild(el("line", { x1: nowX, y1: 6, x2: nowX, y2: 52, stroke: ink3, "stroke-width": 1, "stroke-dasharray": "2 3" }));
+      st.appendChild(el("circle", { cx: nowX, cy: nowY, r: 4, fill: primary, stroke: css("--tn-surface-high"), "stroke-width": 2 }));
+      const lbl = el("text", { x: nowX + 6, y: 12, "font-size": 8.5, "font-weight": 700, fill: ink2 }); lbl.textContent = "Agora"; st.appendChild(lbl);
+    }
+
+    /* --- Previsão: Wahrscheinlichkeits-Fläche 96h --- */
+    const cp = document.getElementById("chart-prob");
+    if (cp) {
+      cp.innerHTML = "";
+      [25, 50, 75].forEach(gy => cp.appendChild(el("line", { x1: 0, y1: 104 - gy * 0.9, x2: 290, y2: 104 - gy * 0.9, stroke: grid, "stroke-width": 1 })));
+      const probs = [20,45,62,70,55,30,20,15,10,8,10,18,30,42,38,25,15,8,5,5,8,14,35,55,60,48,30,18];
+      const pts = probs.map((p, i) => [i / (probs.length - 1) * 290, 104 - p * 0.9]);
+      const d = smoothPath(pts);
+      cp.appendChild(el("path", { d: d + " L 290,104 L 0,104 Z", fill: band, stroke: "none" }));
+      cp.appendChild(el("path", { d: d, fill: "none", stroke: primary, "stroke-width": 2, "stroke-linecap": "round" }));
+      const peak = el("circle", { cx: pts[3][0], cy: pts[3][1], r: 3.5, fill: primary, stroke: css("--tn-surface-high"), "stroke-width": 2 });
+      cp.appendChild(peak);
+      const tl = el("text", { x: pts[3][0] + 6, y: pts[3][1] - 5, "font-size": 9, "font-weight": 700, fill: ink2 }); tl.textContent = "70%"; cp.appendChild(tl);
+      [["100", 12], ["50", 60], ["0", 103]].forEach(([s, y]) => { const t = el("text", { x: 288, y: y, "font-size": 8, fill: ink3, "text-anchor": "end" }); t.textContent = s; cp.appendChild(t); });
+    }
+
+    /* --- Confidence-Streifen --- */
+    const cs = document.getElementById("conf-strip");
+    if (cs) {
+      cs.innerHTML = "";
+      const seq = [cAlta,cAlta,cMod,cMod,cMod,cAlta,cAlta,cAlta,cMod,cBaixa,cBaixa,cMod,cMod,cAlta,cAlta,cMod];
+      seq.forEach(c => { const i = document.createElement("i"); i.style.background = c; cs.appendChild(i); });
+    }
+
+    /* --- Previsão: mm-Balken mit Faixa --- */
+    const cm = document.getElementById("chart-mm");
+    if (cm) {
+      cm.innerHTML = "";
+      [1, 2, 3].forEach(v => cm.appendChild(el("line", { x1: 0, y1: 90 - v * 26, x2: 290, y2: 90 - v * 26, stroke: grid, "stroke-width": 1 })));
+      const med = [0,0.4,1.2,1.6,0.8,0.2,0,0,0,0,0,0.3,0.8,1.1,0.6,0.2,0,0,0,0,0.1,0.4,1.8,2.6,2.1,1.2,0.4,0];
+      const hi  = med.map(m => m > 0 ? m * 2.2 + 0.3 : 0);
+      const w = 290 / med.length;
+      hi.forEach((v, i) => { if (v > 0) cm.appendChild(el("rect", { x: (i * w + 1).toFixed(1), y: (90 - v * 26).toFixed(1), width: (w - 2).toFixed(1), height: (v * 26).toFixed(1), rx: 2, fill: band })); });
+      med.forEach((v, i) => { if (v > 0) cm.appendChild(el("rect", { x: (i * w + 2.5).toFixed(1), y: (90 - v * 26).toFixed(1), width: (w - 5).toFixed(1), height: (v * 26).toFixed(1), rx: 2, fill: primary })); });
+      const t = el("text", { x: 23 * w, y: 90 - 2.6 * 26 - 5, "font-size": 9, "font-weight": 700, fill: ink2, "text-anchor": "middle" }); t.textContent = "2,6"; cm.appendChild(t);
+      [["3", 90 - 78 + 3], ["1", 90 - 26 + 3]].forEach(([s, y]) => { const tx = el("text", { x: 288, y: y, "font-size": 8, fill: ink3, "text-anchor": "end" }); tx.textContent = s + " mm"; cm.appendChild(tx); });
+    }
+
+    /* --- Maré: 24h-Kurve mit Nacht, Sonne, Extremen --- */
+    const ct = document.getElementById("chart-tide");
+    if (ct) {
+      ct.innerHTML = "";
+      const X = h => h / 24 * 290;
+      const H = 118, top = 14;
+      // Nachtbänder: 0–05:21 und 17:14–24
+      ct.appendChild(el("rect", { x: 0, y: 0, width: X(5.35), height: H, fill: night }));
+      ct.appendChild(el("rect", { x: X(17.23), y: 0, width: 290 - X(17.23), height: H, fill: night }));
+      [0.5, 1.0, 1.5, 2.0].forEach(v => ct.appendChild(el("line", { x1: 0, y1: H - 10 - v * 42, x2: 290, y2: H - 10 - v * 42, stroke: grid, "stroke-width": 1 })));
+      // Gezeiten: low 03:35 0.4 / high 09:50 2.1 / low 15:48 0.5 / high 22:05 2.0
+      const ev = [[-2.6, 2.0], [3.58, 0.4], [9.83, 2.1], [15.8, 0.5], [22.08, 2.0], [28.2, 0.45]];
+      const pts = [];
+      for (let h = 0; h <= 24; h += 0.4) {
+        let k = 0; while (k < ev.length - 2 && h > ev[k + 1][0]) k++;
+        const [t1, v1] = ev[k], [t2, v2] = ev[k + 1];
+        const ph = (h - t1) / (t2 - t1) * Math.PI;
+        const val = v1 + (v2 - v1) * (1 - Math.cos(ph)) / 2;
+        pts.push([X(h), H - 10 - val * 42]);
+      }
+      const d = smoothPath(pts);
+      ct.appendChild(el("path", { d: d + ` L 290,${H} L 0,${H} Z`, fill: band, stroke: "none" }));
+      ct.appendChild(el("path", { d: d, fill: "none", stroke: primary, "stroke-width": 2.2, "stroke-linecap": "round" }));
+      // Extreme markieren
+      [[3.58, 0.4, "0,4 m", 1], [9.83, 2.1, "2,1 m", -1], [15.8, 0.5, "0,5 m", 1], [22.08, 2.0, "2,0 m", -1]].forEach(([h, v, s, dir]) => {
+        const x = X(h), y = H - 10 - v * 42;
+        ct.appendChild(el("circle", { cx: x, cy: y, r: 3.5, fill: primary, stroke: css("--tn-surface-high"), "stroke-width": 2 }));
+        const t = el("text", { x: x, y: y + (dir > 0 ? 14 : -8), "font-size": 8.5, "font-weight": 700, fill: ink2, "text-anchor": "middle" });
+        t.textContent = s; ct.appendChild(t);
+      });
+      // Sonne
+      [[5.35, "☀"], [17.23, "☀"]].forEach(([h, s]) => {
+        const t = el("text", { x: X(h), y: top - 3, "font-size": 10, fill: tertiary, "text-anchor": "middle" });
+        t.textContent = s; ct.appendChild(t);
+      });
+      // Agora 14:12
+      const nx = X(14.2);
+      let ny = H - 10; for (const [px, py] of pts) if (Math.abs(px - nx) < 4) { ny = py; break; }
+      ct.appendChild(el("line", { x1: nx, y1: top, x2: nx, y2: H - 4, stroke: ink3, "stroke-width": 1, "stroke-dasharray": "2 3" }));
+      ct.appendChild(el("circle", { cx: nx, cy: ny, r: 4.5, fill: tertiary, stroke: css("--tn-surface-high"), "stroke-width": 2 }));
+      const ag = el("text", { x: nx + 6, y: top + 8, "font-size": 9, "font-weight": 700, fill: ink2 }); ag.textContent = "Agora"; ct.appendChild(ag);
+    }
+  }
+
+  draw();
+  // Bei Theme-Wechsel (Artefakt-Toggle oder OS) neu zeichnen, damit Chart-Farben mitziehen
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+})();
+</script>
