@@ -29,6 +29,15 @@ android {
         }
     }
 
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a")
+            isUniversalApk = true
+        }
+    }
+
     buildTypes {
         release {
             // R8 deliberately off for v1: reliability over size; enable after on-device QA.

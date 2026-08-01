@@ -44,14 +44,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TempoRN-release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          path: app/build/outputs/apk/release/*.apk
 
       - name: Publish APK to apk-dist branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p /tmp/dist
-          cp app/build/outputs/apk/release/app-release.apk "/tmp/dist/TempoRN-v1.0.0.apk"
+          cp app/build/outputs/apk/release/app-universal-release.apk "/tmp/dist/TempoRN-v1.0.0.apk"
+          cp app/build/outputs/apk/release/app-arm64-v8a-release.apk "/tmp/dist/TempoRN-v1.0.0-arm64.apk"
+          cp app/build/outputs/apk/release/app-armeabi-v7a-release.apk "/tmp/dist/TempoRN-v1.0.0-arm32.apk"
           cd /tmp/dist
           git init -b apk-dist
           git config user.name "github-actions[bot]"
