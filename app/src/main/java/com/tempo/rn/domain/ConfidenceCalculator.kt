@@ -1,6 +1,7 @@
 package com.tempo.rn.domain
 
 import com.tempo.rn.core.config.ForecastConfig
+import kotlin.math.roundToInt
 
 object ConfidenceCalculator {
 
@@ -30,7 +31,7 @@ object ConfidenceCalculator {
                 ForecastConfig.CONF_HISTORICAL_SKILL_WEIGHT * skill +
                 ForecastConfig.CONF_FRESHNESS_WEIGHT * fresh
         }
-        return (raw * 100.0).toInt().coerceIn(0, 100)
+        return (raw * 100.0).roundToInt().coerceIn(0, 100)
     }
 
     /** Frische der Daten: 1.0 bis FRESHNESS_FULL_MINUTES, dann linear auf 0 bei FRESHNESS_ZERO_MINUTES. */
